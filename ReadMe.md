@@ -13,6 +13,7 @@ The objective of this project is to implement and train a generalized model to p
 - **model.json**: json serialized version of the model architecture
 - **model.h5**: Model weights of the best performing model
 - **model.jpg**: Model diagram
+- **Augmentation_Calculation.pdf**: Pdf document that describes the calculation behind some of values used for augmentation.
 
 # Approach
 It was tricky to approach this project because I was not sure whether to start by generating my own data or start by fitting a model to the Udacity data. I decided on the latter approach. The reason being if I could develop a decent model using Udacity data, I can always supplement it or replace it with my own data. My approach involved the following steps
@@ -30,7 +31,7 @@ My final model was trained upon data that was completely generate by me. I used 
 My model architecture was based on the well established NVIDIA end to end driving model architecture https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/. 
 The model is a convolutional neural network with 1 input normalization layer, 5 convolutional layers, and 3 fully connected layers. The first 3 convolutional layers use a width and height stride of 2 (thereby downsampling the image) while the last 2 use a stride of 1.
 
-![Model](./model.jpg)
+![Model](./model.jpg?raw=true)
 
 The main differences between the NVIDIA model architecture and my architecture are 
 
@@ -67,9 +68,9 @@ A validation generator ('valid_data_generator' in get_data.py) was written along
 # Results
 The model was trained over 12 epochs (with 25600 samples per epoch). The weights were saved for each epoch and independently tested on both the tracks. Although epoch 7 had the lowest validation loss, the weights corresponding to epoch 9 seemed to produce better results on track 1 and track2. It was quite astonishing to see the weights generalize fairly well onto track 2. The car does get stuck on some sharp bends on track 2. I believe that with more training and data augmentation, track 2 can be surmounted as well.
 
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/POhfBo7z414/0.jpg)](https://youtu.be/POhfBo7z414)
+[![Track 1](https://img.youtube.com/vi/POhfBo7z414/0.jpg)](https://youtu.be/POhfBo7z414)
 
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/W_Kz2pVlh2U/0.jpg)](https://youtu.be/W_Kz2pVlh2U)
+[![Track 2](https://img.youtube.com/vi/W_Kz2pVlh2U/0.jpg)](https://youtu.be/W_Kz2pVlh2U)
 
 
 # References
