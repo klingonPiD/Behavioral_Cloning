@@ -16,6 +16,7 @@ The objective of this project is to implement and train a generalized model to p
 
 # Approach
 It was tricky to approach this project because I was not sure whether to start by generating my own data or start by fitting a model to the Udacity data. I decided on the latter approach. The reason being if I could develop a decent model using Udacity data, I can always supplement it or replace it with my own data. My approach involved the following steps
+
 1. Perform data visualization (this is further documented in the _train_steering.ipynb_ file).
 2. Perform data pre-processing to balance the data (this is further documented in the _train_steering.ipynb_ file).
 3. Write a generator function that could be used to train a keras model (more on this below).
@@ -29,9 +30,10 @@ My final model was trained upon data that was completely generate by me. I used 
 My model architecture was based on the well established NVIDIA end to end driving model architecture https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/. 
 The model is a convolutional neural network with 1 input normalization layer, 5 convolutional layers, and 3 fully connected layers. The first 3 convolutional layers use a width and height stride of 2 (thereby downsampling the image) while the last 2 use a stride of 1.
 
-![Model](model.jpg)
+![Model](./model.jpg)
 
 The main differences between the NVIDIA model architecture and my architecture are 
+
 1. I use input images of size 64 x 64. This significantly reduces training time. This also reduces the number of training params to about 150,000 (compared to 250,000 in the NVIDIA model).
 2. I use convolutional kernels of size 3x3 instead of 5x5.
 3. I use HSV inputs instead of YCbCr inputs.
@@ -41,24 +43,24 @@ The main differences between the NVIDIA model architecture and my architecture a
 
 # Generator
 One important aspect of this project was writing a generator function that could read, process and feed data in small batches to the model during training. This is important because the other option is to keep all the image data in memory (all 60000 images which is approximately 10gb of run time memory). Obviously this is not a practical or scaleable approach. My generator function takes in a pandas dataframe (which contains the filenames) and a batch size. It then loops indefinitely generating batches of training data. The generator shuffles the input data at the end of every cycle (i.e after one full run through all the data samples).I also hooked up the data augmentation pipeline to the generator. This makes the generator super powerful in the sense that it not only reads and processes data in small batches on the fly but also augments the data on the fly as well. This helps avoid having to generate and store all the augmented data before training.
-```def aug_data_generator(df, batch_size):
-    df_shuffle = shuffle(df)
-    df_len = len(df)
-    batch_idx = 0
-    while True:
-        X, y = [], []
-        for num_item in range(batch_idx, batch_idx + batch_size):
-            im, st_angle = apply_random_augmentation(df_shuffle.iloc[num_item], False)
-            X.append(im)
-            y.append(st_angle)
-        X_train = np.array(X).astype(np.float32)
-        y_train = np.array(y).astype(np.float64)
-        batch_idx += batch_size
-        if (batch_idx + batch_size) > df_len:
-            batch_idx = 0
-            df_shuffle = shuffle(df)
-        yield X_train, y_train
-```
+
+				def aug_data_generator(df, batch_size):
+					df_shuffle = shuffle(df)
+					df_len = len(df)
+					batch_idx = 0
+					while True:
+						X, y = [], []
+						for num_item in range(batch_idx, batch_idx + batch_size):
+							im, st_angle = apply_random_augmentation(df_shuffle.iloc[num_item], False)
+							X.append(im)
+							y.append(st_angle)
+						X_train = np.array(X).astype(np.float32)
+						y_train = np.array(y).astype(np.float64)
+						batch_idx += batch_size
+						if (batch_idx + batch_size) > df_len:
+							batch_idx = 0
+							df_shuffle = shuffle(df)
+						yield X_train, y_train
 		
 A validation generator ('valid_data_generator' in get_data.py) was written along similar lines (without the augmentation) to perform model evaluation in small batches.
 
