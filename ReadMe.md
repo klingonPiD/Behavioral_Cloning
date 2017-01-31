@@ -31,7 +31,7 @@ My final model was trained upon data that was completely generate by me. I used 
 My model architecture was based on the well established NVIDIA end to end driving model architecture https://devblogs.nvidia.com/parallelforall/deep-learning-self-driving-cars/. 
 The model is a convolutional neural network with 1 input normalization layer, 5 convolutional layers, and 3 fully connected layers. The first 3 convolutional layers use a width and height stride of 2 (thereby downsampling the image) while the last 2 use a stride of 1.
 
-![Model](./model.jpg?raw=true)
+![Model](./Model.jpg?raw=true)
 
 The main differences between the NVIDIA model architecture and my architecture are 
 
